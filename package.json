@@ -1,0 +1,15 @@
+{
+  "name": "campus-threads-co",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Campus Threads Co. – Frontend (Frontend/) and Backend (Backend/)",
+  "scripts": {
+    "dev": "npm run dev --prefix Frontend",
+    "server": "npm run start --prefix Backend",
+    "build": "npm run build --prefix Frontend",
+    "preview": "npm run preview --prefix Frontend",
+    "lint": "npm run lint --prefix Frontend",
+    "test": "npm run test --prefix Frontend",
+    "install:all": "npm install --prefix Frontend && npm install --prefix Backend"
+  }
+}

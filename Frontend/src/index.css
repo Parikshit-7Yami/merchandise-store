@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Campus Merch Store Design System - Medicaps University Colors */
+
+@layer base {
+  :root {
+    /* Maroon/Burgundy and Navy Blue from Medicaps logo */
+    --background: 0 0% 99%;
+    --foreground: 228 45% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 228 45% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 45% 15%;
+
+    /* Primary - Deep Maroon/Burgundy */
+    --primary: 345 70% 32%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Navy Blue */
+    --secondary: 228 55% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 228 20% 95%;
+    --muted-foreground: 228 20% 40%;
+
+    /* Accent - Gold/Warm accent */
+    --accent: 38 80% 55%;
+    --accent-foreground: 228 45% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 228 20% 88%;
+    --input: 228 20% 88%;
+    --ring: 345 70% 32%;
+
+    --radius: 0.625rem;
+
+    /* Custom colors for categories */
+    --boys: 228 55% 35%;
+    --girls: 330 60% 45%;
+    --teachers: 228 45% 20%;
+    --club: 345 70% 32%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(345 70% 32%), hsl(228 55% 25%));
+    --gradient-hero: linear-gradient(180deg, hsl(228 55% 25% / 0.9), hsl(345 70% 32% / 0.85));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(228 20% 97%));
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px hsl(228 45% 15% / 0.08);
+    --shadow-md: 0 4px 16px hsl(228 45% 15% / 0.12);
+    --shadow-lg: 0 8px 32px hsl(228 45% 15% / 0.16);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 228 20% 26%;
+    --sidebar-primary: 345 70% 32%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 228 20% 95%;
+    --sidebar-accent-foreground: 228 45% 15%;
+    --sidebar-border: 228 20% 90%;
+    --sidebar-ring: 345 70% 32%;
+  }
+
+  .dark {
+    --background: 228 45% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 228 40% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 228 40% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 345 65% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 228 50% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 228 30% 18%;
+    --muted-foreground: 228 15% 60%;
+
+    --accent: 38 75% 50%;
+    --accent-foreground: 228 45% 10%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 228 30% 20%;
+    --input: 228 30% 20%;
+    --ring: 345 65% 45%;
+
+    --boys: 228 50% 50%;
+    --girls: 330 55% 55%;
+    --teachers: 228 40% 45%;
+    --club: 345 65% 45%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(345 65% 45%), hsl(228 50% 40%));
+    --gradient-hero: linear-gradient(180deg, hsl(228 50% 15% / 0.95), hsl(345 65% 25% / 0.9));
+    --gradient-card: linear-gradient(145deg, hsl(228 40% 14%), hsl(228 40% 10%));
+
+    --shadow-sm: 0 2px 8px hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 16px hsl(0 0% 0% / 0.4);
+    --shadow-lg: 0 8px 32px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 228 45% 10%;
+    --sidebar-foreground: 228 15% 85%;
+    --sidebar-primary: 345 65% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 228 30% 18%;
+    --sidebar-accent-foreground: 228 15% 85%;
+    --sidebar-border: 228 30% 20%;
+    --sidebar-ring: 345 65% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-md);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--shadow-lg);
+  }
+}
