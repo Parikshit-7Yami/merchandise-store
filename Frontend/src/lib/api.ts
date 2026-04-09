@@ -1,4 +1,4 @@
-const API = '/api';
+const API = import.meta.env.VITE_API_BASE_URL || '/api';
 
 function headers(adminKey?: string): HeadersInit {
   const h: HeadersInit = { 'Content-Type': 'application/json' };
