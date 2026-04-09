@@ -22,7 +22,10 @@ dns.setServers(["1.1.1.1", "1.0.0.1"]);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: "https://merchandise-store-two.vercel.app",
+  credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
