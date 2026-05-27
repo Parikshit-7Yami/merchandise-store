@@ -9,8 +9,8 @@ function getTransporter() {
   const port = process.env.SMTP_PORT || 587;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  if (!host || !user || !pass) {
-    console.warn('SMTP not configured (SMTP_HOST, SMTP_USER, SMTP_PASS). Emails will be logged only.');
+  if (!host || !user || !pass || user === 'your-email@gmail.com') {
+    console.warn('SMTP not configured or using placeholders. Emails will be logged only.');
     return null;
   }
   transporter = nodemailer.createTransport({

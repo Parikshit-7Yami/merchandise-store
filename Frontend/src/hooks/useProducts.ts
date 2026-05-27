@@ -15,6 +15,7 @@ function apiToProduct(p: Awaited<ReturnType<typeof fetchProducts>>[number]): Pro
     colors: p.colors ?? [],
     sizes: p.sizes ?? [],
     description: p.description,
+    isActive: p.isActive ?? true,
   };
 }
 

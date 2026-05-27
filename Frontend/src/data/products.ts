@@ -1,18 +1,57 @@
 import { Product } from '@/types';
+import geminiImg from '../assets/Gemini_Generated_Image_ne319xne319xne31.png';
+import layeredShirtImg from '../assets/layered_shirt.png';
+import upperImg from '../assets/upper.png';
 
 export const products: Product[] = [
+  {
+    id: 'boys-tshirt-new',
+    name: 'Signature Campus Graphic Tee',
+    price: 749,
+    image: geminiImg,
+    category: 'boys',
+    subcategory: 'T-shirts',
+    fabric: 'Cotton',
+    colors: ['#FFFFFF', '#000000'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    description: 'A vibrant signature graphic t-shirt perfect for making a statement on campus.'
+  },
+  {
+    id: 'boys-shirt-new',
+    name: 'Modern Layered Campus Shirt',
+    price: 899,
+    image: layeredShirtImg,
+    category: 'boys',
+    subcategory: 'Shirts',
+    fabric: 'Cotton Blend',
+    colors: ['#2c3e50', '#1a237e'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    description: 'A stylish and modern layered shirt, offering both comfort and a smart-casual look.'
+  },
+  {
+    id: 'boys-upper-new',
+    name: 'Essential Active Upper',
+    price: 699,
+    image: upperImg,
+    category: 'boys',
+    subcategory: 'Sweatshirts',
+    fabric: 'Fleece Blend',
+    colors: ['#1a237e', '#8B1538'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    description: 'Your go-to active upper for cooler weather or morning workouts.'
+  },
   // Boys - T-shirts
   {
     id: 'boys-tshirt-1',
     name: 'Classic College Tee',
     price: 599,
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400',
+    image: '/products/boys_tshirt_1777437314693.png',
     category: 'boys',
     subcategory: 'T-shirts',
     fabric: 'Cotton',
     colors: ['#FFFFFF', '#1a237e', '#8B1538', '#000000'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Premium cotton t-shirt with Medicaps logo'
+    description: 'Premium black cotton t-shirt featuring the distinctive university logo prominently on the chest. Perfect for everyday campus wear.'
   },
   {
     id: 'boys-tshirt-2',
@@ -40,28 +79,16 @@ export const products: Product[] = [
   },
   // Boys - Sweatshirts
   {
-    id: 'boys-sweat-1',
-    name: 'University Hoodie',
-    price: 1299,
-    image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400',
-    category: 'boys',
-    subcategory: 'Sweatshirts',
-    fabric: 'Fleece',
-    colors: ['#1a237e', '#8B1538', '#2c3e50', '#000000'],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Warm fleece hoodie with embroidered logo'
-  },
-  {
     id: 'boys-sweat-2',
-    name: 'Crew Neck Sweatshirt',
-    price: 1099,
-    image: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?w=400',
+    name: 'Varsity Style Jacket',
+    price: 1499,
+    image: '/products/boys_jacket_1777437351152.png',
     category: 'boys',
     subcategory: 'Sweatshirts',
-    fabric: 'Cotton Fleece',
+    fabric: 'Cotton Blend',
     colors: ['#1a237e', '#8B1538', '#FFFFFF'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Classic crew neck sweatshirt'
+    description: 'Comfortable varsity style jacket for boys with the university logo on the left chest.'
   },
   // Boys - Sports T-shirts
   {
@@ -93,13 +120,13 @@ export const products: Product[] = [
     id: 'girls-tshirt-1',
     name: 'Fitted College Tee',
     price: 599,
-    image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400',
+    image: '/products/girls_tshirt_1777437366887.png',
     category: 'girls',
     subcategory: 'T-shirts',
     fabric: 'Cotton',
     colors: ['#FFFFFF', '#1a237e', '#8B1538', '#E91E63'],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    description: 'Fitted cotton t-shirt for women'
+    description: 'Fitted white cotton t-shirt for girls with the university logo printed prominently on the chest.'
   },
   {
     id: 'girls-tshirt-2',
@@ -113,55 +140,55 @@ export const products: Product[] = [
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
     description: 'Relaxed fit comfortable tee'
   },
-  {
-    id: 'girls-tshirt-3',
-    name: 'V-Neck University Tee',
-    price: 579,
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400',
-    category: 'girls',
-    subcategory: 'T-shirts',
-    fabric: 'Cotton',
-    colors: ['#FFFFFF', '#1a237e', '#8B1538'],
-    sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    description: 'Classic v-neck design'
-  },
+  // {
+  //   id: 'girls-tshirt-3',
+  //   name: 'V-Neck University Tee',
+  //   price: 579,
+  //   image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400',
+  //   category: 'girls',
+  //   subcategory: 'T-shirts',
+  //   fabric: 'Cotton',
+  //   colors: ['#FFFFFF', '#1a237e', '#8B1538'],
+  //   sizes: ['XS', 'S', 'M', 'L', 'XL'],
+  //   description: 'Classic v-neck design'
+  // },
   // Girls - Sweatshirts
   {
     id: 'girls-sweat-1',
-    name: 'Cropped Hoodie',
+    name: 'Cropped Navy Sweatshirt',
     price: 1199,
-    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400',
+    image: '/products/girls_sweatshirt_1777437380733.png',
     category: 'girls',
     subcategory: 'Sweatshirts',
     fabric: 'Fleece',
     colors: ['#1a237e', '#8B1538', '#FFFFFF', '#E91E63'],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    description: 'Trendy cropped hoodie'
+    description: 'Trendy cropped navy blue sweatshirt for girls, adorned with the university logo.'
   },
   {
     id: 'girls-sweat-2',
-    name: 'Oversized Sweatshirt',
-    price: 1149,
-    image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400',
+    name: 'Formal Knit Sweater',
+    price: 1299,
+    image: '/products/formal_girls_sweatshirt_1777470938815.png',
     category: 'girls',
     subcategory: 'Sweatshirts',
-    fabric: 'Cotton Fleece',
-    colors: ['#1a237e', '#8B1538', '#2c3e50'],
+    fabric: 'Premium Knit',
+    colors: ['#FFFFFF', '#1a237e', '#000000'],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    description: 'Cozy oversized fit'
+    description: 'Elegant formal knit sweater for girls, featuring a subtle university logo. Perfect for professional presentations and formal events.'
   },
   // Teachers - Formal Shirts
   {
     id: 'teachers-shirt-1',
     name: 'Formal Oxford Shirt',
     price: 1499,
-    image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400',
+    image: '/products/teachers_shirt_1777437398246.png',
     category: 'teachers',
     subcategory: 'Formal Shirts',
     fabric: 'Cotton Oxford',
     colors: ['#FFFFFF', '#1a237e', '#87CEEB'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Premium oxford fabric formal shirt'
+    description: 'Formal light blue button-down oxford shirt for teachers. Features a discreet university logo embroidered on the left chest pocket area.'
   },
   {
     id: 'teachers-shirt-2',
@@ -180,13 +207,13 @@ export const products: Product[] = [
     id: 'teachers-blazer-1',
     name: 'University Blazer',
     price: 3999,
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400',
+    image: '/products/teachers_blazer_1777437416659.png',
     category: 'teachers',
     subcategory: 'Blazers',
     fabric: 'Wool Blend',
     colors: ['#1a237e', '#000000', '#2c3e50'],
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Premium university blazer with crest'
+    description: 'Formal tailored navy blue blazer for teachers. Impeccably designed with a subtle university crest embroidered on the chest pocket for a distinguished look.'
   },
   {
     id: 'teachers-blazer-2',

@@ -373,8 +373,6 @@ const ProductManagement = () => {
   const [dbProducts, setDbProducts] = useState<Awaited<ReturnType<typeof fetchProducts>>>([]);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editPrice, setEditPrice] = useState<string>('');
-  const [editStock, setEditStock] = useState<string>('');
   const [form, setForm] = useState({
     name: '', price: '', stock: '', image: '', category: 'boys', subcategory: 'T-shirts', fabric: '', colors: '', sizes: '', description: '',
   });
@@ -383,7 +381,7 @@ const ProductManagement = () => {
 
   const loadProducts = async () => {
     try {
-      const list = await fetchProducts();
+      const list = await fetchProducts(user?.adminKey);
       setDbProducts(list);
     } catch {
       setDbProducts([]);
@@ -392,9 +390,45 @@ const ProductManagement = () => {
 
   useEffect(() => {
     loadProducts();
-  }, []);
+  }, [user?.adminKey]);
 
-  const handleAdd = async (e: React.FormEvent) => {
+  const startEdit = (p: Awaited<ReturnType<typeof fetchProducts>>[number]) => {
+    setEditingId(p.id);
+    setForm({
+      name: p.name,
+      price: p.price.toString(),
+      stock: p.stock !== undefined ? p.stock.toString() : '0',
+      image: p.image,
+      category: p.category,
+      subcategory: p.subcategory,
+      fabric: p.fabric,
+      colors: p.colors?.join(', ') || '',
+      sizes: p.sizes?.join(', ') || '',
+      description: p.description || '',
+    });
+    setSelectedFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm({ name: '', price: '', stock: '', image: '', category: 'boys', subcategory: 'T-shirts', fabric: '', colors: '', sizes: '', description: '' });
+    setSelectedFile(null);
+  };
+
+  const handleToggleActive = async (id: string, currentStatus: boolean) => {
+    const adminKey = user?.adminKey;
+    if (!adminKey) return toast.error('Session expired');
+    try {
+      await updateProduct(id, { isActive: !currentStatus }, adminKey);
+      toast.success(!currentStatus ? 'Product activated' : 'Product deactivated');
+      loadProducts();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to toggle status');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const adminKey = user?.adminKey;
     if (!adminKey) {
@@ -419,23 +453,30 @@ const ProductManagement = () => {
 
       const colors = form.colors ? form.colors.split(',').map(s => s.trim()).filter(Boolean) : [];
       const sizes = form.sizes ? form.sizes.split(',').map(s => s.trim()).filter(Boolean) : ['S', 'M', 'L', 'XL'];
-      const result = await apiAddProduct(
-        {
-          name: form.name,
-          price,
-          image: finalImageUrl,
-          category: form.category as 'boys' | 'girls' | 'teachers',
-          subcategory: form.subcategory,
-          fabric: form.fabric,
-          colors: colors.length ? colors : ['#1a237e'],
-          sizes: sizes.length ? sizes : ['S', 'M', 'L', 'XL'],
-          description: form.description || undefined,
-          stock: form.stock ? Number(form.stock) : 0,
-        },
-        adminKey
-      );
-      toast.success(`Product added. Notifications sent to ${result.notification.sent} student(s).`);
-      setForm({ name: '', price: '', stock: '', image: '', category: 'boys', subcategory: 'T-shirts', fabric: '', colors: '', sizes: '', description: '' });
+      
+      const productData = {
+        name: form.name,
+        price,
+        image: finalImageUrl,
+        category: form.category as 'boys' | 'girls' | 'teachers',
+        subcategory: form.subcategory,
+        fabric: form.fabric,
+        colors: colors.length ? colors : ['#1a237e'],
+        sizes: sizes.length ? sizes : ['S', 'M', 'L', 'XL'],
+        description: form.description || undefined,
+        stock: form.stock ? Number(form.stock) : 0,
+      };
+
+      if (editingId) {
+        await updateProduct(editingId, productData, adminKey);
+        toast.success('Product updated successfully');
+        cancelEdit();
+      } else {
+        const result = await apiAddProduct(productData, adminKey);
+        toast.success(`Product added. Notifications sent to ${result.notification.sent} student(s).`);
+        setForm({ name: '', price: '', stock: '', image: '', category: 'boys', subcategory: 'T-shirts', fabric: '', colors: '', sizes: '', description: '' });
+      }
+      
       setSelectedFile(null);
 
       // Reset the file input element visually
@@ -444,7 +485,7 @@ const ProductManagement = () => {
 
       loadProducts();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to add product');
+      toast.error(err instanceof Error ? err.message : 'Failed to save product');
     } finally {
       setLoading(false);
     }
@@ -463,36 +504,16 @@ const ProductManagement = () => {
     }
   };
 
-  const handleUpdate = async (id: string) => {
-    const adminKey = user?.adminKey;
-    if (!adminKey) return toast.error('Session expired');
-    const price = Number(editPrice);
-    const stock = Number(editStock);
-    if (isNaN(price)) return toast.error('Invalid price');
-
-    const updates: { price?: number; stock?: number } = { price };
-    if (!isNaN(stock)) updates.stock = stock;
-
-    try {
-      await updateProduct(id, updates, adminKey);
-      toast.success('Product updated');
-      setEditingId(null);
-      loadProducts();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update');
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Plus className="h-5 w-5" />
-          New Product (sends email to all student emails)
+          {editingId ? <Edit2 className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+          {editingId ? 'Edit Product' : 'New Product (sends email to all student emails)'}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <form onSubmit={handleAdd} className="space-y-4 max-w-xl">
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Name</Label>
@@ -503,7 +524,7 @@ const ProductManagement = () => {
               <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} placeholder="599" required />
             </div>
             <div className="space-y-2">
-              <Label>Initial Stock</Label>
+              <Label>Stock</Label>
               <Input type="number" value={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.value }))} placeholder="0" />
             </div>
           </div>
@@ -570,7 +591,7 @@ const ProductManagement = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Colors (comma-separated hex or names)</Label>
+              <Label>Colors (comma-separated)</Label>
               <Input value={form.colors} onChange={e => setForm(f => ({ ...f, colors: e.target.value }))} placeholder="#1a237e, #8B1538" />
             </div>
             <div className="space-y-2">
@@ -582,7 +603,16 @@ const ProductManagement = () => {
             <Label>Description</Label>
             <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Optional" rows={2} />
           </div>
-          <Button type="submit" disabled={loading}>Add product & send notifications</Button>
+          <div className="flex gap-2">
+            <Button type="submit" disabled={loading}>
+              {editingId ? 'Update Product' : 'Add Product'}
+            </Button>
+            {editingId && (
+              <Button type="button" variant="outline" onClick={cancelEdit}>
+                Cancel Edit
+              </Button>
+            )}
+          </div>
         </form>
         <div>
           <h4 className="font-medium mb-2">Products in database ({dbProducts.length})</h4>
@@ -596,61 +626,35 @@ const ProductManagement = () => {
                   <TableHead>Price</TableHead>
                   <TableHead>Stock</TableHead>
                   <TableHead>Category</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {dbProducts.map(p => (
-                  <TableRow key={p.id}>
+                  <TableRow key={p.id} className={editingId === p.id ? "bg-muted/50" : ""}>
                     <TableCell>{p.name}</TableCell>
-                    <TableCell>
-                      {editingId === p.id ? (
-                        <Input
-                          type="number"
-                          value={editPrice}
-                          onChange={e => setEditPrice(e.target.value)}
-                          className="w-20 h-8"
-                          autoFocus
-                          onKeyDown={e => e.key === 'Enter' && handleUpdate(p.id)}
-                        />
-                      ) : (
-                        `₹${p.price}`
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingId === p.id ? (
-                        <Input
-                          type="number"
-                          value={editStock}
-                          onChange={e => setEditStock(e.target.value)}
-                          className="w-20 h-8"
-                          onKeyDown={e => e.key === 'Enter' && handleUpdate(p.id)}
-                        />
-                      ) : (
-                        p.stock !== undefined ? p.stock : 0
-                      )}
-                    </TableCell>
+                    <TableCell>₹{p.price}</TableCell>
+                    <TableCell>{p.stock !== undefined ? p.stock : 0}</TableCell>
                     <TableCell>{p.category}</TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant={p.isActive !== false ? 'default' : 'secondary'}
+                        className="cursor-pointer"
+                        onClick={() => handleToggleActive(p.id, p.isActive !== false)}
+                      >
+                        {p.isActive !== false ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </TableCell>
                     <TableCell className="text-right">
-                      {editingId === p.id ? (
-                        <div className="flex justify-end gap-2">
-                          <Button size="icon" variant="ghost" onClick={() => handleUpdate(p.id)}>
-                            <Check className="h-4 w-4 text-green-500" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => setEditingId(null)}>
-                            <X className="h-4 w-4 text-red-500" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="flex justify-end gap-2">
-                          <Button size="icon" variant="ghost" onClick={() => { setEditingId(p.id); setEditPrice(p.price.toString()); setEditStock(p.stock !== undefined ? p.stock.toString() : '0'); }}>
-                            <Edit2 className="h-4 w-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleDelete(p.id, p.name)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </div>
-                      )}
+                      <div className="flex justify-end gap-2">
+                        <Button size="icon" variant="ghost" onClick={() => startEdit(p)}>
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button size="icon" variant="ghost" onClick={() => handleDelete(p.id, p.name)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

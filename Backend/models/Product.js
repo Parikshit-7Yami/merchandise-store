@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema(
     sizes: [{ type: String }],
     description: { type: String },
     stock: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

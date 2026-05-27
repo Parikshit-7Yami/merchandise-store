@@ -11,6 +11,7 @@ export interface Product {
   description?: string;
   eventName?: string;
   isEventMerch?: boolean;
+  isActive?: boolean;
 }
 
 export interface CartItem {

@@ -18,6 +18,7 @@ export interface ApiProduct {
   sizes: string[];
   description?: string;
   stock?: number;
+  isActive?: boolean;
   createdAt?: string;
 }
 
@@ -28,8 +29,10 @@ export interface ApiStudent {
   createdAt?: string;
 }
 
-export async function fetchProducts(): Promise<ApiProduct[]> {
-  const res = await fetch(`${API}/products`);
+export async function fetchProducts(adminKey?: string): Promise<ApiProduct[]> {
+  const h: HeadersInit = {};
+  if (adminKey) (h as Record<string, string>)['x-admin-key'] = adminKey;
+  const res = await fetch(`${API}/products`, { headers: h });
   if (!res.ok) return [];
   return res.json();
 }
@@ -111,7 +114,7 @@ export async function loginStudentApi(body: { email: string; password: string })
 }
 export async function updateProduct(
   id: string,
-  updates: { price?: number; stock?: number },
+  updates: Partial<ApiProduct>,
   adminKey: string
 ): Promise<ApiProduct> {
   const res = await fetch(`${API}/products/${id}`, {

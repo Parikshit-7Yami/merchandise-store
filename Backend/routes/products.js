@@ -47,7 +47,10 @@ router.post('/upload', adminAuth, upload.single('image'), async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find({}).sort({ createdAt: -1 }).lean();
+    const adminKey = req.headers['x-admin-key'];
+    const isAdmin = adminKey === (process.env.ADMIN_KEY || 'admin123');
+    const query = isAdmin ? {} : { isActive: true };
+    const products = await Product.find(query).sort({ createdAt: -1 }).lean();
     const list = products.map((p) => ({
       ...p,
       id: p._id.toString(),
@@ -95,18 +98,23 @@ router.post('/', adminAuth, async (req, res) => {
 router.put('/:id', adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const { price, stock } = req.body;
+    const { name, price, image, category, subcategory, fabric, colors, sizes, description, stock, isActive } = req.body;
 
     const updateFields = {};
-    if (price !== undefined && !isNaN(Number(price))) {
-      updateFields.price = Number(price);
-    }
-    if (stock !== undefined && !isNaN(Number(stock))) {
-      updateFields.stock = Number(stock);
-    }
+    if (name) updateFields.name = name;
+    if (price !== undefined && !isNaN(Number(price))) updateFields.price = Number(price);
+    if (image) updateFields.image = image;
+    if (category) updateFields.category = category;
+    if (subcategory) updateFields.subcategory = subcategory;
+    if (fabric) updateFields.fabric = fabric;
+    if (Array.isArray(colors)) updateFields.colors = colors;
+    if (Array.isArray(sizes)) updateFields.sizes = sizes;
+    if (description !== undefined) updateFields.description = description;
+    if (stock !== undefined && !isNaN(Number(stock))) updateFields.stock = Number(stock);
+    if (isActive !== undefined) updateFields.isActive = Boolean(isActive);
 
     if (Object.keys(updateFields).length === 0) {
-      return res.status(400).json({ error: 'Valid price or stock is required' });
+      return res.status(400).json({ error: 'No valid fields provided for update' });
     }
 
     const product = await Product.findByIdAndUpdate(
