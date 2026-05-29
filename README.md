@@ -45,3 +45,4 @@ Run both in separate terminals for full app.
 ## Cleanup (optional)
 
 If you still have **src**, **public**, or **server** folders at the project root from before the split, you can remove them; the app now runs from **Frontend/** and **Backend/** only. Close any tools using those folders before deleting.
+
